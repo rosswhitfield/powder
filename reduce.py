@@ -41,15 +41,15 @@ np.savetxt(os.path.join(outdir, '{}.dat'.format(scan)),
            np.transpose((xarray.flatten(), yarray.flatten(), np.ones_like(xarray.flatten()))),
            fmt='%.3f')
 
-tolerance = 0.05
+tolerance = 0.0505
 
 bins = np.arange(xarray.min(), xarray.max(), tolerance)
 inds = np.digitize(xarray.ravel(), bins)
 
-bin_count = np.bincount(inds.ravel())
+bin_count = np.bincount(inds)
 
-x = np.bincount(inds.ravel(), weights=xarray.ravel())/bin_count
-y = np.bincount(inds.ravel(), weights=yarray.ravel())/bin_count
+x = np.bincount(inds, weights=xarray.ravel())/bin_count
+y = np.bincount(inds, weights=yarray.ravel())/bin_count
 
 np.savetxt(os.path.join(outdir, '{}_binned.dat'.format(scan)),
            np.transpose((x[1:], y[1:], np.sqrt(y[1:]))),

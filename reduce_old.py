@@ -46,7 +46,7 @@ index_array = np.argsort(xarray.flatten())
 x = xarray.flatten()
 y = yarray.flatten()
 
-tolerance = 0.0501
+tolerance = 0.0505
 
 x_out = []
 y_out = []
@@ -61,6 +61,6 @@ while len(x)>0:
     x = x[np.logical_not(mask)]
     y = y[np.logical_not(mask)]
 
-np.savetxt(os.path.join(outdir, '{}_binned.dat'.format(scan)),
+np.savetxt(os.path.join(outdir, '{}_binned_old.dat'.format(scan)),
                       np.transpose((x_out, y_out, e_out)),
                       fmt='%.3f')
