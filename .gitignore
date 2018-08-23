@@ -1,0 +1,10 @@
+# Blacklist everything
+*
+# Whitelist .gitignore
+!.gitignore
+# Whitelist all directories
+!*/
+# Whitelist *.py
+!*.py
+!*.ipynb
+.ipynb_checkpoints/
