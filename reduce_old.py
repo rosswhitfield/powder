@@ -52,14 +52,17 @@ x_out = []
 y_out = []
 e_out = []
 
-while len(x)>0:
-    x_store = x.min()
+while True:
+    x_store = np.nanmin(x)
     mask = np.logical_and(x >= x_store, x <= x_store+tolerance)
-    x_out.append(np.mean(x[mask]))
-    y_out.append(np.mean(y[mask]))
-    e_out.append(np.sqrt(np.sum(y[mask]))/sum(mask))
-    x = x[np.logical_not(mask)]
-    y = y[np.logical_not(mask)]
+    x_out.append(np.nanmean(x[mask]))
+    y_out.append(np.nanmean(y[mask]))
+    e_out.append(np.sqrt(np.nansum(y[mask]))/np.sum(mask))
+    x[mask]=np.nan
+    y[mask]=np.nan
+    if np.nansum(x) == 0:
+        break
+
 
 np.savetxt(os.path.join(outdir, '{}_binned_old.dat'.format(scan)),
                       np.transpose((x_out, y_out, e_out)),
