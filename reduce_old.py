@@ -46,7 +46,7 @@ index_array = np.argsort(xarray.flatten())
 x = xarray.flatten()
 y = yarray.flatten()
 
-tolerance = 0.0505
+tolerance = 0.0507
 
 x_out = []
 y_out = []

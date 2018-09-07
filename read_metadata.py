@@ -6,7 +6,7 @@ import datetime
 
 filename = sys.argv[1]
 
-regexp = '#(.*)=(.*)'
+regexp = '#(.*?)=(.*)'
 metadata = dict(np.char.strip(np.fromregex(filename, regexp, dtype='str')))
 
 run_title = metadata['scan_title']

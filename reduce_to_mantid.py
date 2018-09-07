@@ -59,12 +59,15 @@ intermediate = CreateWorkspace(DataX=xarray.ravel()[index_array],
 binning = 0.05
 
 d = (counts/monitor).ravel()
+e = (np.sqrt(counts)/monitor).ravel()
 data = CreateWorkspace(DataX=xarray.ravel()[index_array],
-                       DataY=d[index_array])
+                       DataY=d[index_array],
+                       DataE=np.sqrt(d[index_array]))
 
 n = np.repeat(vcorr, len(xarray.T)).ravel()/normalization_monitor
 norm = CreateWorkspace(DataX=xarray.ravel()[index_array],
-                       DataY=n[index_array])
+                       DataY=n[index_array],
+                       DataE=np.sqrt(n[index_array]))
 
 data = Rebin(data, Params=binning)
 norm = Rebin(norm, Params=binning)
@@ -72,3 +75,17 @@ norm = Rebin(norm, Params=binning)
 ws = Divide(data, norm)
 
 SaveFocusedXYE(ws, Filename='out.xye', SplitFiles=False, IncludeHeader=False)
+
+c = CreateWorkspace(DataX=xarray.ravel()[index_array],
+                    DataY=counts.ravel()[index_array],
+                    DataE=np.sqrt(counts.ravel()[index_array]))
+
+n = CreateWorkspace(DataX=xarray.ravel()[index_array],
+                    DataY=n[index_array],
+                    DataE=np.sqrt(n[index_array]))
+
+#data = Rebin(data, Params=binning)
+#norm = Rebin(norm, Params=binning)
+
+d = Divide(c, n)
+
