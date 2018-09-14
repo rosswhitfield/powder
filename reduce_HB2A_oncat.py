@@ -27,10 +27,8 @@ CLIENT_SECRET = None
 class InMemoryTokenStore(object):
     def __init__(self):
         self._token = None
-
     def set_token(self, token):
         self._token = token
-
     def get_token(self):
         return self._token
 
