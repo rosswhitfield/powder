@@ -41,10 +41,12 @@ datafile = oncat.Datafile.retrieve(
     facility="HFIR",
     instrument="HB2A",
     experiment=ipts,
-    projection=["indexed.run_number"],
+    projection=["indexed.run_number", "metadata.scan_title", "created", "metadata.completed", "metadata.Sum of Counts", "metadata.experiment"],
 )
 
 try:
-    print(datafile.to_dict()['indexed']['run_number'])
+    print(datafile.indexed['run_number'])
 except KeyError:
     print("This file doesn't have a run number")
+
+print(datafile)
