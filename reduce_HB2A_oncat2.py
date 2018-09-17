@@ -2,7 +2,6 @@
 import os
 import sys
 import pyoncat
-import getpass
 import client
 try:
     from postprocessing.publish_plot import publish_plot
@@ -38,11 +37,22 @@ datafile = oncat.Datafile.retrieve(
     facility="HFIR",
     instrument="HB2A",
     experiment=ipts,
-    projection=["indexed.run_number"],
+    projection=["indexed.run_number", "metadata.scan_title", "created","metadata.completed", "metadata.Sum of Counts", "metadata.experiment"],
 )
+
+# create summary table
+
+table ='<div></div><p></p><table class="info display">'
+row = '<tr><td>{}</td><td>{}</td></tr>'
+table += row.format('Scan title', '<b>{}</b>'.format(datafile.metadata['scan_title']))
+table += row.format('Experiment title', datafile.metadata['experiment'])
+table += row.format('Run start', datafile.created)
+table += row.format('Run end', datafile.metadata['completed'])
+table += row.format('Total counts', datafile.metadata['Sum of Counts'])
+table += '</table><p></p>'
 
 try:
     runNumber = datafile.to_dict()['indexed']['run_number']
-    request = publish_plot('HB2A', runNumber, files={'file': div}, config='/SNS/users/rwp/post_processing.conf')
+    request = publish_plot('HB2A', runNumber, files={'file': table+div})
 except KeyError:
     print("This file doesn't have a run number")

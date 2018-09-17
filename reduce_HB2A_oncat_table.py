@@ -2,7 +2,6 @@
 import os
 import sys
 import pyoncat
-import getpass
 try:
     from postprocessing.publish_plot import publish_plot
 except ImportError:
@@ -57,20 +56,22 @@ datafile = oncat.Datafile.retrieve(
     facility="HFIR",
     instrument="HB2A",
     experiment=ipts,
-    projection=["indexed.run_number", "metadata.scan_title", "created","metadata.completed", "metadata.Sum of Counts", "metadata.experiment"],
+    projection=["indexed.run_number", "metadata.scan_title", "created","metadata.completed", "metadata.Sum of Counts", "metadata.experiment",'abc'],
 )
+
+datadict = datafile.to_dict()
 
 # create table
 
-row = '<tr><td>{}</td><td>{}</td>\n'
+row = '<tr><td>{}</td><td>{}</td></tr>'
 
-table = '<table style="width:80%">\n'
-table += row.format('Scan title', datafile.metadata['scan_title'])
-table += row.format('Experiment title', datafile.metadata['experiment'])
-table += row.format('Run start', datafile.created)
-table += row.format('Run end', datafile.metadata['completed'])
-table += row.format('Total counts', datafile.metadata['Sum of Counts'])
-table += '</table>'
+table = '<div></div><table class="info display">'
+table += row.format('Scan title', '<b>{}</b>'.format(datadict.get('scan_title','')))
+table += row.format('Experiment title', datadict.get('metadata').get('experiment',''))
+table += row.format('Run start', datadict.get('created',''))
+table += row.format('Run end', datadict.get('metadata').get('completed',''))
+table += row.format('Total counts', datadict.get('metadata').get('Sum of Counts',''))
+table += '</table><p></p>'
 print(table)
 
 
