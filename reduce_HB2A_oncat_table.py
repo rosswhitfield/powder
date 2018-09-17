@@ -62,10 +62,15 @@ datafile = oncat.Datafile.retrieve(
 
 # create table
 
+row = '<tr><td>{}</td><td>{}</td>\n'
+
 table = '<table style="width:80%">\n'
-table += '<tr><td>Scan title</td><td>{}</td>'.format(datafile.metadata['scan_title'])
-table += '<tr><td>Experiment title</td><td>{}</td>'.format(datafile.metadata['experiment'])
-table += '<tr><td>Run start</td><td>{}</td>'.format(datafile.created))
+table += row.format('Scan title', datafile.metadata['scan_title'])
+table += row.format('Experiment title', datafile.metadata['experiment'])
+table += row.format('Run start', datafile.created)
+table += row.format('Run end', datafile.metadata['completed'])
+table += row.format('Total counts', datafile.metadata['Sum of Counts'])
+table += '</table>'
 print(table)
 
 
