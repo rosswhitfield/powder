@@ -37,18 +37,28 @@ datafile = oncat.Datafile.retrieve(
     facility="HFIR",
     instrument="HB2A",
     experiment=ipts,
-    projection=["indexed.run_number", "metadata.scan_title", "created","metadata.completed", "metadata.Sum of Counts", "metadata.experiment"],
+    projection=["indexed.run_number",
+                "metadata.scan_title",
+                "metadata.time",
+                "metadata.date",
+                "metadata.Sum of Counts",
+                "metadata.experiment",
+                "metadata.experiment_number",
+                "metadata.proposal",
+                "metadata.scan"],
 )
+
+datadict = datafile.to_dict()
 
 # create summary table
 
 table ='<div></div><p></p><table class="info display">'
 row = '<tr><td>{}</td><td>{}</td></tr>'
-table += row.format('Scan title', '<b>{}</b>'.format(datafile.metadata['scan_title']))
-table += row.format('Experiment title', datafile.metadata['experiment'])
-table += row.format('Run start', datafile.created)
-table += row.format('Run end', datafile.metadata['completed'])
-table += row.format('Total counts', datafile.metadata['Sum of Counts'])
+table += row.format('Scan', '<b>{} - {}</b>'.format(datadict.get('metadata').get('scan',''), datadict.get('metadata').get('scan_title','')))
+table += row.format('Experiment', '{} - {}'.format(datadict.get('metadata').get('experiment_number',''), datadict.get('metadata').get('experiment','')))
+table += row.format('IPTS', datadict.get('metadata').get('proposal',''))
+table += row.format('Run start', datadict.get('metadata').get('date','') + ' ' + datadict.get('metadata').get('time',''))
+table += row.format('Total counts', datadict.get('metadata').get('Sum of Counts',''))
 table += '</table><p></p>'
 
 try:

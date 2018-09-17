@@ -56,7 +56,7 @@ datafile = oncat.Datafile.retrieve(
     facility="HFIR",
     instrument="HB2A",
     experiment=ipts,
-    projection=["indexed.run_number", "metadata.scan_title", "created","metadata.completed", "metadata.Sum of Counts", "metadata.experiment",'abc'],
+    projection=["indexed.run_number", "metadata.scan", "experiment", "metadata.scan_title", "metadata.time", "metadata.date", "metadata.Sum of Counts", "metadata.experiment", "metadata.experiment_number"],
 )
 
 datadict = datafile.to_dict()
