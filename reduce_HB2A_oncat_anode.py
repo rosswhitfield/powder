@@ -3,13 +3,14 @@ import os
 import sys
 import pyoncat
 import getpass
+import numpy as np
 try:
     from postprocessing.publish_plot import publish_plot
 except ImportError:
     from finddata import publish_plot
 
 sys.path.insert(0, "/opt/mantidnightly/bin")
-from mantid.simpleapi import HB2AReduce, SaveFocusedXYE, SavePlot1D
+from mantid.simpleapi import HB2AReduce, SaveFocusedXYE, SavePlot1D, SaveAscii
 
 filename = sys.argv[1]
 output_file = os.path.split(filename)[-1].replace('.dat', '.xye')
@@ -20,17 +21,23 @@ ws = HB2AReduce(filename)
 def_y = ws.getRun().getLogData('def_y').value
 def_x = ws.getRun().getLogData('def_x').value
 
+anode=None
 if 'anode' in def_y: # Plot andoe intensity instead
     try:
-        anode = int(dey_y.replace('anode',''))
+        anode = int(def_y.replace('anode',''))
     except ValueError:
-        anode = None
+        pass
 
 if anode: # Re-reduce data for anode plot
     ws = HB2AReduce(filename, IndividualDetectors=True)
-    SaveAscii(ws, Filename=os.path.join(outdir, output_file), SpectrumList=anode, Sperator='Space', ColumnHeader=False, WriteSpectrumID=False)
-    div = SavePlot1D(ws, OutputType='plotly', SpectraList=anode, SpectraNames=def_y)
+    SaveAscii(ws, Filename=os.path.join(outdir, output_file), SpectrumList=anode-1, Separator='Space', ColumnHeader=False, WriteSpectrumID=False)
+    div = SavePlot1D(ws, OutputType='plotly', SpectraList=anode)
 else:
+    # Check binning is correct
+    x = ws.getRun().getLogData(def_x).value
+    step_size = (x[-1]-x[0])/(len(x)-1)
+    if not np.isclose(step_size, 0.05):
+        ws = HB2AReduce(filename,BinWidth=step_size)
     SaveFocusedXYE(ws, Filename=os.path.join(outdir, output_file), SplitFiles=False, IncludeHeader=False)
     div = SavePlot1D(ws, OutputType='plotly')
 
