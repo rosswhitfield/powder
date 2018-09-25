@@ -66,4 +66,6 @@ with open(ipts+'.csv', 'w') as f:
     f.write(','.join(proj.split('.')[-1] for proj in projection)+'\n')
     # datafiles
     for datafile in datafiles:
-        f.write(','.join(str(extract_value(datafile, proj)) for proj in projection)+'\n')
+        if len(datafile.indexed) == 0:
+            continue
+        f.write(', '.join(str(extract_value(datafile, proj)) for proj in projection)+'\n')
