@@ -16,7 +16,7 @@ filename = sys.argv[1]
 output_file = os.path.split(filename)[-1]
 outdir = sys.argv[2]
 
-ws = HB2AReduce(filename)
+ws = HB2AReduce(filename, Scale=20000)
 
 def_y = ws.getRun().getLogData('def_y').value
 def_x = ws.getRun().getLogData('def_x').value
@@ -29,7 +29,7 @@ if 'anode' in def_y:  # Plot anode intensity instead
         pass
 
 if anode:  # Re-reduce data for anode plot
-    ws = HB2AReduce(filename, IndividualDetectors=True)
+    ws = HB2AReduce(filename, IndividualDetectors=True, Scale=20000)
     SaveAscii(ws, Filename=os.path.join(outdir, output_file), SpectrumList=anode-1, Separator='Space', ColumnHeader=False, WriteSpectrumID=False)
     div = SavePlot1D(ws, OutputType='plotly', SpectraList=anode)
 else:
@@ -39,7 +39,7 @@ else:
         if len(x) > 1:
             step_size = (x[-1]-x[0])/(len(x)-1)
             if not np.isclose(step_size, 0.05, atol=0.001):
-                ws = HB2AReduce(filename, BinWidth=step_size)
+                ws = HB2AReduce(filename, BinWidth=step_size, Scale=20000)
     SaveFocusedXYE(ws, Filename=os.path.join(outdir, output_file), SplitFiles=False, IncludeHeader=False)
     div = SavePlot1D(ws, OutputType='plotly')
 
