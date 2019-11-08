@@ -13,7 +13,8 @@ sys.path.insert(0, "/opt/mantidnightly/bin")
 from mantid.simpleapi import HB2AReduce, SaveFocusedXYE, SavePlot1D, SaveAscii
 
 filename = sys.argv[1]
-output_file = os.path.split(filename)[-1]
+name, ext = os.path.splitext(os.path.basename(filename))
+output_file = name+"_autoreduced"+ext
 outdir = sys.argv[2]
 
 ws = HB2AReduce(filename, Scale=20000)
