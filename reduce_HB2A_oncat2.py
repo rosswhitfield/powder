@@ -1,15 +1,19 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
+from __future__ import (absolute_import, division, print_function, unicode_literals)
+
 import os
 import sys
+sys.path.insert(0,"/opt/mantid50/bin")
+sys.path.insert(1,"/opt/mantid50/lib")
+
 import pyoncat
 import client
 import numpy as np
 try:
     from postprocessing.publish_plot import publish_plot
 except ImportError:
-    from finddata import publish_plot
+    from finddata.publish_plot import publish_plot
 
-sys.path.insert(0, "/opt/mantidnightly/bin")
 from mantid.simpleapi import HB2AReduce, SaveFocusedXYE, SavePlot1D, SaveAscii
 
 filename = sys.argv[1]
